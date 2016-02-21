@@ -4,78 +4,72 @@ import java.util.Scanner;
 
 public class TwentyOneSticks {
 
-	public static void main(String[] args) {
-		int numSticks = 21;
-		int numToTake = 0;
+	int numSticks = 21;
+	int numToTake = 0;
 
-		Scanner input = new Scanner(System.in);
-		Scanner take = new Scanner(System.in);
+	Scanner input = new Scanner(System.in);
+	Scanner take = new Scanner(System.in);
+
+	public static void main(String[] args) {
+
+		TwentyOneSticks game = new TwentyOneSticks();
 
 		System.out.println("Would you like to go first? (Y/n)");
-		String goFirst = input.nextLine();
+		String goFirst = game.input.nextLine().toUpperCase();
 
-		while (numSticks > 0) {
-			if (goFirst.equals("y") || goFirst.equals("Y")) {
-				System.out.println("There are " + numSticks + " sticks");
-				System.out.println("How many sticks to take (1 or 2)");
-				numToTake = take.nextInt();
-				
-				if (numToTake > 2) {
-					numToTake = 2;
-				} else if (numToTake < 1) {
-					numToTake = 1;
-				}
-				System.out.println("You took " + numToTake + " sticks.");
+		while (game.numSticks > 0) {
+			if (goFirst.equals("Y")) {
+				game.playerTurn(game); // extracted to a method
 
-				numSticks = numSticks - numToTake;
-
-				if (numSticks <= 0) {
+				if (game.numSticks <= 0) {
 					System.out.println("You lose!");
 				} else {
-					if ((numSticks - 2) % 3 == 0 || numSticks - 2 == 0) {
-						numToTake = 1;
-					} else {
-						numToTake = 2;
-					}
+					game.computerTurn(game);
 
-					System.out.println("Computer takes " + numToTake + " sticks");
-					numSticks = numSticks - numToTake;
-
-					if (numSticks <= 0) {
+					if (game.numSticks <= 0) {
 						System.out.println("You win!");
 					}
 				}
 			} else {
-				if ((numSticks - 2) % 3 == 0 || numSticks - 2 == 0) {
-					numToTake = 1;
-				} else {
-					numToTake = 2;
-				}
+				game.computerTurn(game); // extracted to a method
 
-				System.out.println("Computer takes " + numToTake + " sticks");
-				numSticks = numSticks - numToTake;
-
-				if (numSticks <= 0) {
+				if (game.numSticks <= 0) {
 					System.out.println("You win!");
 				} else {
-					System.out.println("There are " + numSticks + " sticks");
-					System.out.println("How many sticks to take (1 or 2)");
-					numToTake = take.nextInt();
-					
-					if (numToTake > 2) {
-						numToTake = 2;
-					} else if (numToTake < 1) {
-						numToTake = 1;
-					}
-					System.out.println("You took " + numToTake + " sticks.");
+					game.playerTurn(game); // extracted to a method
 
-					numSticks = numSticks - numToTake;
-
-					if (numSticks <= 0) {
+					if (game.numSticks <= 0) {
 						System.out.println("You lose!");
 					}
 				}
 			} // else
 		} // while
 	} // main
+
+	void playerTurn(TwentyOneSticks g) {
+		System.out.println("There are " + g.numSticks + " sticks");
+		System.out.println("How many sticks to take (1 or 2)");
+		g.numToTake = g.take.nextInt();
+
+		if (g.numToTake > 2) {
+			g.numToTake = 2;
+		} else if (g.numToTake < 1) {
+			g.numToTake = 1;
+		}
+
+		System.out.println("You took " + g.numToTake + " sticks.");
+
+		g.numSticks = g.numSticks - g.numToTake;
+	}
+
+	void computerTurn(TwentyOneSticks g) {
+		if ((g.numSticks - 2) % 3 == 0 || g.numSticks - 2 == 0) {
+			g.numToTake = 1;
+		} else {
+			g.numToTake = 2;
+		}
+
+		System.out.println("Computer takes " + g.numToTake + " sticks");
+		g.numSticks = g.numSticks - g.numToTake;
+	}
 } // class
